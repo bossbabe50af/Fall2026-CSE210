@@ -1,0 +1,158 @@
+
+@startuml
+top to bottom direction
+
+class Program {
+    + Main(args : string[]) : void
+}
+
+
+class Scripture {
+    - _reference : Reference
+    - _words : List<Word>
+    - _random : Random
+
+    + Scripture(reference : Reference, text : string)
+    + HideRandomWords(numberToHide : int) : void
+    + GetDisplayText() : string
+    + IsCompletelyHidden() : bool
+}
+
+
+
+class Reference {
+    - _book : string
+    - _chapter : int
+    - _verse : int
+    - _endVerse : int
+
+    + Reference(book : string, chapter : int, verse : int)
+    + Reference(book : string, chapter : int, verse : int, endVerse : int)
+    + GetDisplayText() : string
+}
+
+
+
+class Word {
+    - _text : string
+    - _isHidden : bool
+
+    + Word(text : string)
+    + Hide() : void
+    + Show() : void
+    + IsHidden() : bool
+    + GetDisplayText() : string
+}
+
+
+note right of Program
+  PROGRAM FLOW
+  1. Creates the scripture reference.
+  2. Creates the Scripture object.
+  3. Displays the scripture.
+  4. Prompts Enter or quit.
+  5. Hides random words when Enter is pressed.
+  6. Ends when the user quits
+     or all words are hidden.
+end note
+
+Program ..> Scripture : creates and uses
+
+
+note left of Scripture
+  SCRIPTURE CLASS
+
+  ATTRIBUTES
+  _reference: Stores the scripture reference.
+  _words: Stores individual Word objects.
+  _random: Selects random words.
+
+  CONSTRUCTOR
+  Receives the reference and scripture text.
+  Splits the text into Word objects.
+
+  METHODS
+  HideRandomWords(): Hides selected words.
+  GetDisplayText(): Displays the scripture.
+  IsCompletelyHidden(): Checks whether
+  all words have been hidden.
+end note
+
+
+note left of Reference
+  REFERENCE CLASS
+
+  ATTRIBUTES
+  _book: Stores the book name.
+  _chapter: Stores the chapter number.
+  _verse: Stores the starting verse.
+  _endVerse: Stores the ending verse.
+
+  CONSTRUCTORS
+  Reference(book, chapter, verse):
+  Creates a single-verse reference.
+
+  Reference(book, chapter, verse, endVerse):
+  Creates a verse-range reference.
+
+  METHOD
+  GetDisplayText():
+  Formats the scripture reference,
+  such as John 3:16 or Proverbs 3:5-6.
+end note
+
+
+note right of Word
+  WORD CLASS
+
+  ATTRIBUTES
+  _text: Stores the original word.
+  _isHidden: Tracks whether it is hidden.
+
+  CONSTRUCTOR
+  Word(text):
+  Initializes the word as visible.
+
+  METHODS
+  Hide(): Hides the word.
+  Show(): Makes the word visible.
+  IsHidden(): Checks its hidden status.
+  GetDisplayText(): Returns the word
+  or underscores if hidden.
+end note
+
+
+note bottom of Scripture
+  HOW THE METHODS WORK TOGETHER
+
+  1. Program.Main() creates a Reference
+     and passes it to Scripture().
+
+  2. Scripture() creates Word objects
+     from the scripture text.
+
+  3. Program.Main() calls
+     Scripture.GetDisplayText()
+     to display the scripture.
+
+  4. When Enter is pressed,
+     Scripture.HideRandomWords()
+     selects words and calls Word.Hide().
+
+  5. Scripture.GetDisplayText() uses
+     Reference.GetDisplayText() and
+     Word.GetDisplayText() to display
+     the updated scripture.
+
+  6. Scripture.IsCompletelyHidden()
+     checks Word.IsHidden() to determine
+     whether the program should end.
+end note
+
+
+
+
+Scripture --> Reference : stores
+Scripture "1" --> "1..*" Word : contains
+
+@enduml
