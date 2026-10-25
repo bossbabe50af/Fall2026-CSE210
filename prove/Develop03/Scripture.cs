@@ -1,72 +1,31 @@
-using System;
-using System.Collections.Generic;
-
-public class Scripture
+public class Word
 {
-    private readonly Reference _reference;
-    private readonly List<Word> _words;
+    private readonly string _text;
+    private bool _isHidden;
 
-    public Scripture(Reference reference, string text)
+    public Word(string text)
     {
-        _reference = reference;
-        _words = new List<Word>();
-
-        string[] parts = text.Split(
-            (char[])null,
-            StringSplitOptions.RemoveEmptyEntries);
-
-        foreach (string part in parts)
-        {
-            _words.Add(new Word(part));
-        }
+        _text = text;
+        _isHidden = false;
     }
 
-    public void HideRandomWords(int numberToHide)
+    public void Hide()
     {
-        List<Word> visibleWords = new List<Word>();
+        _isHidden = true;
+    }
 
-        foreach (Word word in _words)
-        {
-            if (!word.IsHidden())
-            {
-                visibleWords.Add(word);
-            }
-        }
-
-        for (int i = 0;
-             i < numberToHide && visibleWords.Count > 0;
-             i++)
-        {
-            int index = Random.Shared.Next(visibleWords.Count);
-
-            visibleWords[index].Hide();
-            visibleWords.RemoveAt(index);
-        }
+    public bool IsHidden()
+    {
+        return _isHidden;
     }
 
     public string GetDisplayText()
     {
-        List<string> displayedWords = new List<string>();
-
-        foreach (Word word in _words)
+        if (_isHidden)
         {
-            displayedWords.Add(word.GetDisplayText());
+            return new string('_', _text.Length);
         }
 
-        return $"{_reference.GetDisplayText()} " +
-            string.Join(" ", displayedWords);
-    }
-
-    public bool IsCompletelyHidden()
-    {
-        foreach (Word word in _words)
-        {
-            if (!word.IsHidden())
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return _text;
     }
 }
