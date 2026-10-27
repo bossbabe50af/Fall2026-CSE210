@@ -1,31 +1,72 @@
-public class Word
+using System;
+using System.Collections.Generic;
+
+public class Scripture
 {
-    private readonly string _text;
-    private bool _isHidden;
+    private readonly Reference _reference;
+    private readonly List<Word> _words;
 
-    public Word(string text)
+    public Scripture(Reference reference, string text)
     {
-        _text = text;
-        _isHidden = false;
+        _reference = reference;
+        _words = new List<Word>();
+
+        string[] parts = text.Split(
+            (char[])null,
+            StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string part in parts)
+        {
+            _words.Add(new Word(part));
+        }
     }
 
-    public void Hide()
+    public void HideRandomWords(int numberToHide)
     {
-        _isHidden = true;
-    }
+        List<Word> visibleWords = new List<Word>();
 
-    public bool IsHidden()
-    {
-        return _isHidden;
+        foreach (Word word in _words)
+        {
+            if (!word.IsHidden())
+            {
+                visibleWords.Add(word);
+            }
+        }
+
+        for (int i = 0;
+             i < numberToHide && visibleWords.Count > 0;
+             i++)
+        {
+            int index = Random.Shared.Next(visibleWords.Count);
+
+            visibleWords[index].Hide();
+            visibleWords.RemoveAt(index);
+        }
     }
 
     public string GetDisplayText()
     {
-        if (_isHidden)
+        List<string> displayedWords = new List<string>();
+
+        foreach (Word word in _words)
         {
-            return new string('_', _text.Length);
+            displayedWords.Add(word.GetDisplayText());
         }
 
-        return _text;
+        return $"{_reference.GetDisplayText()} " +
+            string.Join(" ", displayedWords);
+    }
+
+    public bool IsCompletelyHidden()
+    {
+        foreach (Word word in _words)
+        {
+            if (!word.IsHidden())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
