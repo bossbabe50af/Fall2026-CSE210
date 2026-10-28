@@ -1,0 +1,77 @@
+@startuml
+!pragma layout smetana
+title Mindfulness Program - W07 Designer Draft
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam classBackgroundColor #F1F6FB
+skinparam classBorderColor #284B63
+skinparam ArrowColor #284B63
+skinparam nodesep 50
+skinparam ranksep 65
+hide circle
+class Activity {
+  - _name : string
+  - _description : string
+  - _duration : int
+  + Activity(name : string, description : string)
+  + GetDuration() : int
+  + DisplayStartingMessage() : void
+  + DisplayEndingMessage() : void
+  + ShowSpinner(seconds : int) : void
+  + ShowCountDown(seconds : int) : void
+}
+class BreathingActivity {
+  + BreathingActivity()
+  + Run() : void
+}
+class ReflectingActivity {
+  - _prompts : List<string>
+  - _questions : List<string>
+  - _availableQuestions : List<string>
+  - _random : Random
+  + ReflectingActivity()
+  + Run() : void
+  - GetRandomQuestion() : string
+}
+class ListingActivity {
+  - _prompts : List<string>
+  - _random : Random
+  + ListingActivity()
+  + Run() : void
+  - GetListFromUser() : List<string>
+}
+class Program {
+  - {static} Main(args : string[]) : void
+}
+Activity <|-- BreathingActivity
+Activity <|-- ReflectingActivity
+Activity <|-- ListingActivity
+Program ..> BreathingActivity : creates / calls Run()
+Program ..> ReflectingActivity : creates / calls Run()
+Program ..> ListingActivity : creates / calls Run()
+note top of Activity
+Shared state and behavior stay in Activity.
+Derived constructors call base(name, description).
+Private fields are accessed through methods.
+end note
+note bottom of BreathingActivity
+No additional fields needed.
+Alternates breathing countdowns.
+end note
+note bottom of ReflectingActivity
+Random prompt and timed questions.
+Extra: no question repeats until all are used.
+end note
+note bottom of ListingActivity
+Random prompt and timed keyboard input.
+Displays the count of submitted entries.
+end note
+legend bottom
++ public    - private    ~ internal
+Hollow triangle: inheritance, pointing to Activity.
+Dashed arrow: Program uses the activity.
+endlegend
+@enduml
