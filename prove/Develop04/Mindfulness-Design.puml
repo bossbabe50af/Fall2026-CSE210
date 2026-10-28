@@ -69,9 +69,24 @@ note bottom of ListingActivity
 Random prompt and timed keyboard input.
 Displays the count of submitted entries.
 end note
+note as Interaction
+<b>How the classes interact</b>
+1. Program displays the menu and calls the selected activity's Run().
+2. Each derived constructor calls Activity's constructor with its name and description.
+3. Run() calls DisplayStartingMessage() to request duration and show a preparation spinner.
+4. BreathingActivity alternates breathing instructions using ShowCountDown().
+5. ReflectingActivity selects a prompt, then questions using GetRandomQuestion().
+   ShowSpinner() gives time to reflect; questions do not repeat until all are used.
+6. ListingActivity selects a prompt and calls GetListFromUser() for timed input.
+   It counts nonblank entries submitted with Enter and displays the total.
+7. Each Run() calls DisplayEndingMessage(), then returns to Program's menu.
+   Activity keeps shared fields private; derived classes use GetDuration().
+end note
+Program -[hidden]down- Interaction
 legend bottom
 + public    - private    ~ internal
 Hollow triangle: inheritance, pointing to Activity.
 Dashed arrow: Program uses the activity.
 endlegend
 @enduml
+
