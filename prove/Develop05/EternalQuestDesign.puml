@@ -1,0 +1,102 @@
+
+@startuml
+title Eternal Quest - Class Diagram
+
+skinparam classAttributeIconSize 0
+
+abstract class Goal {
+  - _name : string
+  - _description : string
+  - _points : int
+  + Goal(name : string, description : string, points : int)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetDetailsString() : string
+  + GetStringRepresentation() : string
+}
+
+class SimpleGoal {
+  - _isComplete : bool
+  + SimpleGoal(name : string, description : string, points : int, isComplete : bool)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetStringRepresentation() : string
+}
+
+class EternalGoal {
+  + EternalGoal(name : string, description : string, points : int)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetStringRepresentation() : string
+}
+
+class ChecklistGoal {
+  - _target : int
+  - _amount : int
+  - _bonus : int
+  + ChecklistGoal(name : string, description : string, points : int, target : int, bonus : int, amount : int)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetDetailsString() : string
+  + GetStringRepresentation() : string
+}
+
+class GoalManager {
+  - _goals : List<Goal>
+  - _score : int
+  + GoalManager()
+  + Start() : void
+  + CreateGoal() : void
+  + ListGoals() : void
+  + RecordEvent() : void
+  + DisplayScore() : void
+  + SaveGoals() : void
+  + LoadGoals() : void
+}
+
+Goal <|-- SimpleGoal
+Goal <|-- EternalGoal
+Goal <|-- ChecklistGoal
+
+
+GoalManager "1" o-- "0..*" Goal : manages
+
+note right of GoalManager
+  **How the Eternal Quest Program Runs**
+
+  1. Program starts and creates GoalManager.
+     The score starts at 0 and the goal list is empty.
+
+  2. GoalManager displays the menu:
+     Create Goal, List Goals, Save Goals,
+     Load Goals, Record Event, or Quit.
+
+  3. Create Goal asks the user to select
+     SimpleGoal, EternalGoal, or ChecklistGoal.
+     The user enters the goal information.
+
+  4. List Goals displays all saved goals
+     and their completion status.
+
+  5. Save Goals stores the goals and score
+     in a file for future use.
+
+  6. Load Goals restores previously saved
+     goals and the total score.
+
+  7. Record Event allows the user to select
+     a goal and calls RecordEvent().
+     Each goal type handles the event
+     differently through polymorphism.
+     Points earned are added to the score.
+
+  8. IsComplete() determines whether
+     the selected goal is finished.
+
+  9. The menu repeats until the user
+     selects Quit.
+
+  10. The program ends.
+end note
+
+@enduml
