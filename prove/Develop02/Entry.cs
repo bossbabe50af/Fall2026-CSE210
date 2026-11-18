@@ -1,23 +1,23 @@
+
 public class Entry
 {
-    public string Date {get; set;}
-    public string Prompt {get; set;}
-    public string Response {get; set;}
-    public string Mood {get; set;}
+    //store info for one journal entry
+    public string _date = "";
+    public string _prompt = "";
+    public string _response = "";
+    public string _mood = "";
 
     public void Display()
     {
-        Console.WriteLine($"Date: {Date}");
-        Console.WriteLine($"Prompt: {Prompt}");
-        Console.WriteLine($"Response: {Response}");
-        
+        //displays the date, prompt, and response
+        Console.WriteLine($"Date: {_date}");
+        Console.WriteLine($"Prompt: {_prompt}");
+        Console.WriteLine($"Response: {_response}");
+        //displays the mood only if user enters one
+        if (!string.IsNullOrWhiteSpace(_mood))
+            Console.WriteLine($"Mood: {_mood}");
 
-         if (!string.IsNullOrWhiteSpace(Mood))
-        {
-            Console.WriteLine($"Mood: {Mood}");
-        }
-
+        //adds blank line between journal entried
         Console.WriteLine();
-    
     }
 }
