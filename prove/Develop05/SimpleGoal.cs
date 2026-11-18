@@ -27,7 +27,12 @@ public class SimpleGoal : Goal
 
     public override string GetDetailsString()
     {
-        string status = _isComplete ? "[X]" : "[ ]";
+       string status = "[ ]";
+
+        if (_isComplete)
+        {
+             status = "[X]";
+        }
         return $"{status} {base.GetDetailsString()}";
     }
 

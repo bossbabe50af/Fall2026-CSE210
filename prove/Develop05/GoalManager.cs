@@ -15,9 +15,7 @@ public class GoalManager
         while (choice != "6")
         {
             Console.WriteLine($"\nYou have {_score} points.");
-            // Creativity: I added a level-up system that increases the player's
-            // level for every 500 points earned. This provides extra motivation
-            // as players complete goals and earn rewards.
+    
             int level = (_score / 500) + 1;
             Console.WriteLine($"Your current level is {level}!");
             Console.WriteLine("\nMenu Options:");

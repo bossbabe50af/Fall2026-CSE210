@@ -38,7 +38,12 @@ public class ChecklistGoal : Goal
 
     public override string GetDetailsString()
     {
-        string status = IsComplete() ? "[X]" : "[ ]";
+        string status = "[ ]";
+
+            if (IsComplete())
+                {
+                status = "[X]";
+            }
 
         return $"{status} {base.GetDetailsString()} -- " +
                $"Completed {_amountCompleted}/{_target} times";

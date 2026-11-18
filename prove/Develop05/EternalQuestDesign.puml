@@ -1,13 +1,17 @@
+
 @startuml
 title Eternal Quest - Class Diagram
 
 skinparam classAttributeIconSize 0
 
 abstract class Goal {
-  - _name : string
+  - _shortName : string
   - _description : string
   - _points : int
-  + Goal(name : string, description : string, points : int)
+  + Goal(shortName : string, description : string, points : int)
+  + GetShortName() : string
+  + GetDescription() : string
+  + GetPoints() : int
   + RecordEvent() : int
   + IsComplete() : bool
   + GetDetailsString() : string
@@ -16,52 +20,57 @@ abstract class Goal {
 
 class SimpleGoal {
   - _isComplete : bool
-  + SimpleGoal(name : string, description : string, points : int, isComplete : bool)
-  + RecordEvent() : int
-  + IsComplete() : bool
-  + GetStringRepresentation() : string
-}
-
-class EternalGoal {
-  + EternalGoal(name : string, description : string, points : int)
-  + RecordEvent() : int
-  + IsComplete() : bool
-  + GetStringRepresentation() : string
-}
-
-class ChecklistGoal {
-  - _target : int
-  - _amount : int
-  - _bonus : int
-  + ChecklistGoal(name : string, description : string, points : int, target : int, bonus : int, amount : int)
+  + SimpleGoal(shortName : string, description : string, points : int)
   + RecordEvent() : int
   + IsComplete() : bool
   + GetDetailsString() : string
   + GetStringRepresentation() : string
 }
 
+class EternalGoal {
+  + EternalGoal(shortName : string, description : string, points : int)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetDetailsString() : string
+  + GetStringRepresentation() : string
+}
+
+class ChecklistGoal {
+  - _amountCompleted : int
+  - _target : int
+  - _bonus : int
+  + ChecklistGoal(shortName : string, description : string, points : int, target : int, bonus : int)
+  + RecordEvent() : int
+  + IsComplete() : bool
+  + GetDetailsString() : string
+  + GetStringRepresentation() : string
+}
+
+class Program {
+  - {static} Main(args : string[]) : void
+}
+
 class GoalManager {
-  - _goals : List<Goal>
+  - _goals : List~Goal~
   - _score : int
-  + GoalManager()
   + Start() : void
   + CreateGoal() : void
-  + ListGoals() : void
+  + ListGoalDetails() : void
   + RecordEvent() : void
-  + DisplayScore() : void
   + SaveGoals() : void
   + LoadGoals() : void
 }
+
+Program ..> GoalManager : uses
 
 Goal <|-- SimpleGoal
 Goal <|-- EternalGoal
 Goal <|-- ChecklistGoal
 
-
 GoalManager "1" o-- "0..*" Goal : manages
 
 note right of GoalManager
-  **How the Eternal Quest Program Runs**
+  How the Eternal Quest Program Runs
 
   1. Program starts and creates GoalManager.
      The score starts at 0 and the goal list is empty.
@@ -69,6 +78,7 @@ note right of GoalManager
   2. GoalManager displays the menu:
      Create Goal, List Goals, Save Goals,
      Load Goals, Record Event, or Quit.
+     The player's score and level are shown.
 
   3. Create Goal asks the user to select
      SimpleGoal, EternalGoal, or ChecklistGoal.
